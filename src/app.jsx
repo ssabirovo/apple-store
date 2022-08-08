@@ -44,7 +44,6 @@ class App extends Component {
     let bagItems = this.state.bagItems.filter((item) => item !== product);
     this.setState({ bagItems: bagItems, totalPrice: tempPrice });
   };
-
   addBagItem = (product) => {
     const { bagItems, totalPrice, products } = this.state;
     let isOk = bagItems.some((item) => item === product);
