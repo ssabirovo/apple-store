@@ -4,13 +4,7 @@ import OrderSummary from "../order-summary/order-summary";
 import ShippingAddress from "../shipping-address/shipping-address";
 import "./check-user.scss";
 
-const CheckUser = ({
-  bagItems,
-  onPageChange,
-  onLogOut,
-  userData,
-  onInputLabel,
-  totalPrice,
+const CheckUser = ({bagItems,onPageChange,onLogOut,userData,onInputLabel,totalPrice,
 }) => {
   return (
     <div className="check-user">

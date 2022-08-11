@@ -1,32 +1,38 @@
-import React, { Component } from "react";
-import Input from "./components/input";
+import React from "react";
+import { Link } from "react-router-dom";
+import Inputs from "./components/inputs";
 import "./login.scss";
 
-class Login extends Component {
-  render() {
-    const {
-      userName,
-      userStreetName,
-      userCity,
-      userState,
-      userCountry,
-      inputLabel,
-      onLogin,
-    } = this.props;
-    return (
-      <form onSubmit={() => onLogin()} className="login">
-        <Input
-          userName={userName}
-          userStreetName={userStreetName}
-          userCity={userCity}
-          userState={userState}
-          userCountry={userCountry}
-          onLogin={onLogin}
-          inputLabel={inputLabel}
-        />
-      </form>
-    );
-  }
-}
+function Login({ inputLabel, onLogin }) {
+  const userName = React.createRef();
+  const userStreetName = React.createRef();
+  const userCity = React.createRef();
+  const userState = React.createRef();
+  const userCountry = React.createRef();
+  return (
+    <form
+      className="login"
+    >
+      <Inputs
+        userName={userName}
+        userStreetName={userStreetName}
+        userCity={userCity}
+        userState={userState}
+        userCountry={userCountry}
+        onLogin={onLogin}
+        inputLabel={inputLabel}
+      />
 
+      <Link to="/dashboard">
+        <button
+          onClick={() =>
+            onLogin(userName, userStreetName, userCity, userState, userCountry)
+          }
+        >
+          Login
+        </button>
+      </Link>
+    </form>
+  );
+}
 export default Login;

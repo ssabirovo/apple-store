@@ -15,6 +15,8 @@ function Dashboard({
   addViewProduct,
   removeBagItem,
 }) {
+  // console.log("addBagItem ", addBagItem);
+
   return (
     <div className="dashboard">
       <Sidebar onPageChange={onPageChange} onLogOut={onLogOut} />

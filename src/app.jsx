@@ -6,21 +6,16 @@ import View from "./pages/view/view";
 import CheckUser from "./pages/checkout/components/check-user/check-user";
 import products from "./products";
 import "./assets/styles/base.scss";
+import { Route, Switch } from "react-router-dom";
 
 const USER_KEY = "user";
 const PAGE_KEY = "page";
 const REDIRECT_PAGE = "login";
 class App extends Component {
-  userName = React.createRef();
-  userStreetName = React.createRef();
-  userCity = React.createRef();
-  userState = React.createRef();
-  userCountry = React.createRef();
-
   constructor(props) {
     super(props);
-    const user = JSON.parse(localStorage.getItem(USER_KEY)); // get user
-    const page = JSON.parse(localStorage.getItem(PAGE_KEY)); // get page
+    const user = JSON.parse(localStorage.getItem(USER_KEY));
+    const page = JSON.parse(localStorage.getItem(PAGE_KEY));
     this.state = {
       page: user ? page : REDIRECT_PAGE,
       user,
@@ -29,7 +24,6 @@ class App extends Component {
       productName: "",
       bagItems: [],
       totalPrice: 0,
-      //yanfi state qushildi
       viewProduct: products[0],
     };
   }
@@ -37,7 +31,6 @@ class App extends Component {
   addViewProduct = (product) => {
     this.setState({ viewProduct: product });
   };
-
   removeBagItem = (product) => {
     let tempPrice = this.state.totalPrice;
     tempPrice = +tempPrice - +product.price;
@@ -72,17 +65,23 @@ class App extends Component {
     this.setState({ products: temp });
   };
 
-  handleLogin = () => {
+  handleLogin = (
+    userName,
+    userStreetName,
+    userCity,
+    userState,
+    userCountry
+  ) => {
     const data = {
-      userName: this.userName.current.value,
-      userStreetName: this.userStreetName.current.value,
-      userCity: this.userCity.current.value,
-      userState: this.userState.current.value,
-      userCountry: this.userCountry.current.value,
+      userName: userName.current.value,
+      userStreetName: userStreetName.current.value,
+      userCity: userCity.current.value,
+      userState: userState.current.value,
+      userCountry: userCountry.current.value,
     };
     localStorage.setItem(USER_KEY, JSON.stringify(data));
     localStorage.setItem(PAGE_KEY, JSON.stringify("dashboard"));
-    this.setState({ user: data, page: "dashboard" });
+    this.setState({ user: data });
   };
 
   handleInputLabel = (label) => {
@@ -94,79 +93,93 @@ class App extends Component {
     this.setState({ user: null, page: REDIRECT_PAGE });
   };
 
-  handlePageChange = (newPage, product) => {
-    localStorage.setItem(PAGE_KEY, JSON.stringify(newPage));
-    this.setState({ page: newPage, viewProduct: product });
+  handlePageChange = (product) => {
+    // localStorage.setItem(PAGE_KEY, JSON.stringify(newPage));
+    this.setState({ viewProduct: product });
   };
 
-  getPage = () => {
-    const {
-      products,
-      user,
-      bagItems,
-      totalPrice,
-      viewProduct,
-      addViewProduct,
-    } = this.state;
-
+  // getPage = () => {
+  //   const { products, user, bagItems, totalPrice, viewProduct, inputLabel } =
+  //     this.state;
+  //   const defaultProps = {
+  //     onPageChange: this.handlePageChange,
+  //     removeBagItem: this.removeBagItem,
+  //     onLogOut: this.handleLogOut,
+  //     bagItems: bagItems,
+  //     totalPrice: totalPrice,
+  //     addBagItem: this.addBagItem,
+  //     addViewProduct: this.addViewProduct,
+  //   };
+  //   switch (this.state.page) {
+  //     case "login":
+  //       return <Login onLogin={this.handleLogin} inputLabel={inputLabel} />;
+  //     case "dashboard":
+  //       return (
+  // <Dashboard
+  //   {...defaultProps}
+  //   onInputChange={this.handleInputChange}
+  //   products={products}
+  // />
+  //       );
+  //     case "check-user":
+  //       return (
+  // <CheckUser
+  //   userData={user}
+  //   {...defaultProps}
+  //   onInputLabel={this.handleInputLabel}
+  // />
+  //       );
+  //     case "checkout":
+  // return <Checkout {...defaultProps} />;
+  //     case "view":
+  // return <View {...defaultProps} viewProduct={viewProduct} />;
+  //     default:
+  //       return <Login onLogin={this.handleLogin} inputLabel={inputLabel} />;
+  //   }
+  // };
+  render() {
+    const { products, user, bagItems, totalPrice, viewProduct, inputLabel } =
+      this.state;
     const defaultProps = {
-      addViewProduct: addViewProduct,
-      onInputChange: this.handleInputChange,
-      addBagItem: this.addBagItem,
       onPageChange: this.handlePageChange,
+      removeBagItem: this.removeBagItem,
       onLogOut: this.handleLogOut,
-      onProduct: this.handleProduct,
       bagItems: bagItems,
       totalPrice: totalPrice,
-      viewProduct: viewProduct,
-      removeBagItem: this.removeBagItem, //003,
+      addBagItem: this.addBagItem,
+      addViewProduct: this.addViewProduct,
     };
-    console.log(this.state.bagItems);
-    switch (this.state.page) {
-      case "login":
-        return (
-          <Login
-            onLogin={this.handleLogin}
-            userName={this.userName}
-            userStreetName={this.userStreetName}
-            userCity={this.userCity}
-            userState={this.userState}
-            userCountry={this.userCountry}
-            inputLabel={this.state.inputLabel}
-          />
-        );
-      case "dashboard":
-        return <Dashboard {...defaultProps} products={products} />;
-      case "check-user":
-        return (
-          <CheckUser
-            userData={user}
-            {...defaultProps}
-            onInputLabel={this.handleInputLabel}
-          />
-        );
-      case "checkout":
-        return <Checkout {...defaultProps} />;
-      case "view":
-        return <View {...defaultProps} />;
-      default:
-        return (
-          <Login
-            onLogin={this.handleLogin}
-            userName={this.userName}
-            userStreetName={this.userStreetName}
-            userCity={this.userCity}
-            userState={this.userState}
-            userCountry={this.userCountry}
-            inputLabel={this.state.inputLabel}
-          />
-        );
-    }
-  };
+    
+    return (
+      <>
+        <Switch>
+          <Route exact path="/dashboard">
+            <Dashboard
+              {...defaultProps}
+              onInputChange={this.handleInputChange}
+              products={products}
+            />
+          </Route>
 
-  render() {
-    return <>{this.getPage()}</>;
+          <Route exact path="/check-user">
+            <CheckUser
+              userData={user}
+              {...defaultProps}
+              onInputLabel={this.handleInputLabel}
+            />
+          </Route>
+          <Route exact path="/checkout">
+            <Checkout {...defaultProps} />
+          </Route>
+          <Route exact path="/view">
+            <View {...defaultProps} viewProduct={viewProduct} />
+          </Route>
+          <Route exact path="/login">
+            <Login onLogin={this.handleLogin} inputLabel={inputLabel} />
+          </Route>
+        </Switch>
+      </>
+    );
   }
 }
-
 export default App;

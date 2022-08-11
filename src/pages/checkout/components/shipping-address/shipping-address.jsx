@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./shipping-address.scss";
 
 function ShippingAddress({ userData, onPageChange, onInputLabel }) {
@@ -12,9 +13,10 @@ function ShippingAddress({ userData, onPageChange, onInputLabel }) {
           <li>{userData.userState}</li>
           <li>{userData.userCountry}</li>
         </ul>
-        <button onClick={() => (onPageChange("login"), onInputLabel("Save"))}>
-          Change
-        </button>
+
+        <Link to="/login">
+          <button>Change</button>
+        </Link>
       </div>
     </div>
   );

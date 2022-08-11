@@ -4,12 +4,12 @@ import { BagAdd } from "../../../../assets/icons/index";
 import Button from "../../../../common/button/button";
 import products from "../../../../products";
 import "./card.scss";
+import { Link } from "react-router-dom";
 
 class ProductCard extends Component {
   render() {
     return (
       <div className="general">
-        {/* <Search /> */}
         <div className="search">
           <input
             onChange={this.props.onInputChange}
@@ -26,12 +26,12 @@ class ProductCard extends Component {
               }`}
             >
               <div
-                onClick={() =>  
-                this.props.onPageChange("view", product)
-                }
+                onClick={() => this.props.onPageChange(product)}
                 className="img-container"
               >
-                <img src={product.imgURL} alt="" />
+                <Link to="/view">
+                  <img src={product.imgURL} alt="" />
+                </Link>
               </div>
               <div className="title-container">
                 <h2> {product.name} </h2>
